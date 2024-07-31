@@ -67,7 +67,7 @@
   </div>
 </div> -->
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 pt-0 fixed-top d-flex flex-row">
+    <nav class="navbar col-lg-12 col-12 pt-0 fixed-top d-flex flex-row" style="z-index: 1;">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
         <a class="navbar-brand brand-logo me-5" href="index.html"><img src="assets//logo.svg" class="me-2"
             alt="logo" /></a>
@@ -170,8 +170,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li
-            class="nav-item {{ (Illuminate\Support\Facades\Route::currentRouteName() == 'master') ? 'active' : '' }}">
+          <li class="nav-item {{ (Illuminate\Support\Facades\Route::currentRouteName() == 'master') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('master') }}">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Mater</span>
