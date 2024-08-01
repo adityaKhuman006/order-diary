@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PayeeCategory extends Model
+class users extends Model
 {
     use HasFactory;
 
-    protected $table = "payee_category";
+    protected $table = "user";
 
     protected $fillable = [
-        "name","remark","phone","balance","date","img"
+        "name",
+        "Office_Vender"
     ];
 }

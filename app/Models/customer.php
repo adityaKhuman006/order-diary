@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentCategory extends Model
+class customer extends Model
 {
     use HasFactory;
 
-    protected $table = "payment_category";
+    protected $table = "customer";
 
     protected $fillable = [
-        "name"
+        "name",
+        "address"
     ];
 }

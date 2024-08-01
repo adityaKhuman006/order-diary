@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('add_account', function (Blueprint $table) {
+        Schema::create('order_to', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('remark');
-            $table->string('phone');
-            $table->string('balance');
-            $table->string('date');
-            $table->string('img');
+            $table->string('number');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('add_account');
+        Schema::dropIfExists('order_to');
     }
 };

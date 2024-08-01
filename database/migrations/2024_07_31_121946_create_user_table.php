@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payee_category', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('remark');
-            $table->string('phone');
-            $table->string('balance');
-            $table->string('date');
-            $table->string('img');
+            $table->string('Office_Vender');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payee_category');
+        Schema::dropIfExists('user');
     }
 };

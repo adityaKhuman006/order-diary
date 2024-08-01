@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class tocategorys extends Model
+class orderTo extends Model
 {
     use HasFactory;
 
-    protected $table = "to_category";
+    protected $table = "order_to";
 
     protected $fillable = [
-        "name"
+        "name",
+        "number"
     ];
 }
