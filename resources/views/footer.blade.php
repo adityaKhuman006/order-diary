@@ -38,6 +38,28 @@
 <script src="assets/js/dashboard.js"></script>
 <script src="assets/js/proBanner.js"></script>
 
+<!-- datatable script -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.dataTables.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
+
+<script>
+  new DataTable('#example', {
+    fixedHeader: true,
+    responsive: true
+  });
+</script>
+
+<script>
+    $(document).ready(function (){
+        $("#loader").hide();
+    })
+</script>
+
+
 <!-- End custom js for this page-->
 <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
 <script src="
@@ -45,45 +67,15 @@ https://cdn.jsdelivr.net/npm/jquery.repeater@1.2.1/jquery.repeater.min.js
 "></script>
 <script>
   $('.repeater').repeater({
-    // (Optional)
-    // start with an empty list of repeaters. Set your first (and only)
-    // "data-repeater-item" with style="display:none;" and pass the
-    // following configuration flag
-    // initEmpty: true,
-    // (Optional)
-    // "defaultValues" sets the values of added items.  The keys of
-    // defaultValues refer to the value of the input's name attribute.
-    // If a default value is not specified for an input, then it will
-    // have its value cleared.
     defaultValues: {
       'text-input': 'foo'
     },
-    // (Optional)
-    // "show" is called just after an item is added.  The item is hidden
-    // at this point.  If a show callback is not given the item will
-    // have $(this).show() called on it.
     show: function () {
       $(this).slideDown();
     },
-    // (Optional)
-    // "hide" is called when a user clicks on a data-repeater-delete
-    // element.  The item is still visible.  "hide" is passed a function
-    // as its first argument which will properly remove the item.
-    // "hide" allows for a confirmation step, to send a delete request
-    // to the server, etc.  If a hide callback is not given the item
-    // will be deleted.
     hide: function (deleteElement) {
-      // if(confirm('Are you sure you want to delete this element?')) {
       $(this).slideUp(deleteElement);
-      // }
     },
-    // (Optional)
-    // You can use this if you need to manually re-index the list
-    // for example if you are using a drag and drop library to reorder
-    // list items
-    // (Optional)
-    // Removes the delete button from the first list item,
-    // defaults to false.
     isFirstItemUndeletable: true
   });
 </script>

@@ -38,4 +38,9 @@ class accountingcontroller extends Controller
     {
         return view('payment');
     }
+
+    public function report()
+    {
+        return view('report');
+    }
 }

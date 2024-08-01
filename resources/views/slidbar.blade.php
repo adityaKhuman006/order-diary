@@ -14,12 +14,16 @@
   <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
   <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <!-- <link rel="stylesheet" href="assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css"> -->
-  {{--
-  <link rel="stylesheet" href="assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css"> --}}
   <link rel="stylesheet" href="assets/vendors/ti-icons/css/themify-icons.css">
   <link rel="stylesheet" type="text/css" href="assets/js/select.dataTables.min.css">
+
+  <!-- data table cdn -->
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.dataTables.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.dataTables.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css">
+
+  <!--  -->
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
@@ -41,9 +45,44 @@
   <!-- endinject -->
   <!-- <link rel="shortcut icon" href="assets/images/favicon.png" /> -->
 </head>
+<style>
+  .loader-parent {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0000003d;
+    z-index: 9999;
+  }
 
+  /* HTML: <div class="loader"></div> */
+  .loader {
+    width: 50px;
+    --b: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: green;
+    -webkit-mask:
+      repeating-conic-gradient(#0000 0deg, #000 1deg 70deg, #0000 71deg 90deg),
+      radial-gradient(farthest-side, #0000 calc(100% - var(--b) - 1px), #000 calc(100% - var(--b)));
+    -webkit-mask-composite: destination-in;
+    mask-composite: intersect;
+    animation: l5 1s infinite;
+  }
+
+  @keyframes l5 {
+    to {
+      transform: rotate(.5turn)
+    }
+  }
+</style>
 
 <body>
+  <div class="loader-parent" id="loader">
+    <div class="loader"></div>
+  </div>
   <div class="container-scroller">
     <!-- <div class="row p-0 m-0 proBanner" id="proBanner">
   <div class="col-md-12 p-0 m-0">
@@ -67,78 +106,18 @@
   </div>
 </div> -->
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 pt-0 fixed-top d-flex flex-row" style="z-index: 1;">
+    <nav class="navbar col-lg-12 col-12 pt-0 fixed-top d-flex flex-row" style="z-index: 0;">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <a class="navbar-brand brand-logo me-5" href="index.html"><img src="assets//logo.svg" class="me-2"
+        <a class="navbar-brand brand-logo me-5" href="index.html"><img src="{{ asset('assets/images/hp-logo.png') }}" class="me-2"
             alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/i.svg" alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{ asset('assets/images/hp-logo.png') }}" alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="icon-menu"></span>
         </button>
-        <!-- <ul class="navbar-nav mr-lg-2">
-      <li class="nav-item nav-search d-none d-lg-block">
-        <div class="input-group">
-          <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-            <span class="input-group-text" id="search">
-              <i class="icon-search"></i>
-            </span>
-          </div>
-          <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-            aria-label="search" aria-describedby="search">
-        </div>
-      </li>
-    </ul> -->
         <ul class="navbar-nav navbar-nav-right">
-          <!-- <li class="nav-item dropdown">
-        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-          data-bs-toggle="dropdown">
-          <i class="icon-bell mx-0"></i>
-          <span class="count"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-          aria-labelledby="notificationDropdown">
-          <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <div class="preview-icon bg-success">
-                <i class="ti-info-alt mx-0"></i>
-              </div>
-            </div>
-            <div class="preview-item-content">
-              <h6 class="preview-subject font-weight-normal">Application Error</h6>
-              <p class="font-weight-light small-text mb-0 text-muted"> Just now </p>
-            </div>
-          </a>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <div class="preview-icon bg-warning">
-                <i class="ti-settings mx-0"></i>
-              </div>
-            </div>
-            <div class="preview-item-content">
-              <h6 class="preview-subject font-weight-normal">Settings</h6>
-              <p class="font-weight-light small-text mb-0 text-muted"> Private message </p>
-            </div>
-          </a>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <div class="preview-icon bg-info">
-                <i class="ti-user mx-0"></i>
-              </div>
-            </div>
-            <div class="preview-item-content">
-              <h6 class="preview-subject font-weight-normal">New user registration</h6>
-              <p class="font-weight-light small-text mb-0 text-muted"> 2 days ago </p>
-            </div>
-          </a>
-        </div>
-      </li> -->
           <li class="nav-item nav-profile dropdown">
-            <!-- <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-          <img src="assets/images/faces/face28.jpg" alt="profile" />
-        </a> -->
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <a class="dropdown-item">
                 <i class="ti-settings text-primary"></i> Settings </a>
@@ -166,21 +145,27 @@
           <li class="nav-item {{ (Illuminate\Support\Facades\Route::currentRouteName() == 'filter'
   || Illuminate\Support\Facades\Route::currentRouteName() == 'index') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('index') }}">
-              <i class="icon-paper menu-icon"></i>
+              <i class="mdi mdi-view-dashboard menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item {{ (Illuminate\Support\Facades\Route::currentRouteName() == 'master') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('master') }}">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Mater</span>
+              <i class="mdi mdi-folder menu-icon"></i>
+              <span class="menu-title">Master</span>
             </a>
           </li>
           <li
             class="nav-item {{ (Illuminate\Support\Facades\Route::currentRouteName() == 'payment') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('payment') }}">
+              <i class="mdi mdi-wallet menu-icon"></i>
+              <span class="menu-title">Payment</span>
+            </a>
+          </li>
+          <li class="nav-item {{ (Illuminate\Support\Facades\Route::currentRouteName() == 'report') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('report') }}">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Mater</span>
+              <span class="menu-title">Report</span>
             </a>
           </li>
           {{-- <li class="nav-item">
@@ -303,7 +288,5 @@
     </li> -->
         </ul>
       </nav>
-
-      <script>
-        $()
-      </script>
+      <div class="main-panel">
+        <div class="content-wrapper" style="z-index: 1;">
