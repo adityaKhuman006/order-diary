@@ -6,8 +6,9 @@ use App\Models\add_account_model;
 use App\Models\customer;
 use App\Models\orderTo;
 use App\Models\uom;
-use App\Models\users;
+use App\Models\masterUsers;
 use Illuminate\Http\Request;
+use Illuminate\Tests\Integration\Queue\Order;
 
 
 class orderDiarycontroller extends Controller
@@ -16,10 +17,81 @@ class orderDiarycontroller extends Controller
     {
         return view('index');
     }
-    public function master(Request $request)
+
+    public function masterUser(Request $request)
     {
-        return view('master');
+        return view('master.user');
     }
+
+    public function masterUom(Request $request)
+    {
+        return view('master.uom');
+    }
+
+    public function masterOrder(Request $request)
+    {
+        $data = orderTo::all();
+            return view('master.order',compact('data'));
+    }
+
+    public function masterCustomer(Request $request)
+    {
+        return view('master.customer');
+    }
+
+    public function createCustomer(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
+            customer::create([
+                "name"=>$item['name'],
+                "address"=>$item['address']
+            ]);
+        }
+
+        return redirect()->route('master.customer');
+    }
+
+    public function createOrder(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
+            orderTo::create([
+                "name"=>$item['name'],
+                "number"=>$item['number']
+            ]);
+        }
+
+        return redirect()->route('master.order');
+    }
+
+    public function createUom(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
+            uom::create([
+                "name"=>$item['name'],
+            ]);
+        }
+
+        return redirect()->route('master.uom');
+
+    }
+
+    public function createUser(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
+            masterUsers::create([
+                "name"=>$item['name'],
+                "type"=>$item['type']
+            ]);
+        }
+
+        return redirect()->route('master.User');
+    }
+
+
     public function payment()
     {
         return view('payment');
@@ -30,4 +102,8 @@ class orderDiarycontroller extends Controller
         return view('report');
     }
 
+    public function updateOrderName(Request $request)
+    {
+//        dd($request->all());
+    }
 }

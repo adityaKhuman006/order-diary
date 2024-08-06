@@ -91,7 +91,7 @@
             {
               label: 'Online Sales',
               data: [400, 340, 550, 480, 170],
-              backgroundColor: '#4B49AC',
+              backgroundColor: '#3ead65',
               borderRadius:5,
             }
           ]
@@ -112,7 +112,7 @@
               ticks: {
                 display: true,
                 color:"#6C7383",
-                    
+
               },
             },
             y: {
@@ -164,9 +164,9 @@
             }
         }]
       });
-    
+
     }
-    if ($("#north-america-chart").length) { 
+    if ($("#north-america-chart").length) {
       const doughnutChartCanvas = document.getElementById('north-america-chart');
       new Chart(doughnutChartCanvas, {
         type: 'doughnut',
@@ -175,7 +175,7 @@
           datasets: [{
               data: [100, 50, 50],
               backgroundColor: [
-                 "#4B49AC","#FFC100", "#248AFD",
+                 "#3ead65","#FFC100", "#248AFD",
               ],
               borderColor: "rgba(0,0,0,0)"
           }]
@@ -214,7 +214,7 @@
         }]
       });
     }
-    if ($("#south-america-chart").length) { 
+    if ($("#south-america-chart").length) {
       const doughnutChartCanvas = document.getElementById('south-america-chart');
       new Chart(doughnutChartCanvas, {
         type: 'doughnut',
@@ -223,7 +223,7 @@
           datasets: [{
               data: [100, 50, 50],
               backgroundColor: [
-                 "#4B49AC","#FFC100", "#248AFD",
+                 "#3ead65","#FFC100", "#248AFD",
               ],
               borderColor: "rgba(0,0,0,0)"
           }]
@@ -273,7 +273,7 @@
       document.querySelector('#proBanner').classList.add('d-none');
       document.querySelector('.navbar').classList.add('fixed-top');
     }
-    
+
     if ($( ".navbar" ).hasClass( "fixed-top" )) {
       document.querySelector('.page-body-wrapper').classList.remove('pt-0');
       document.querySelector('.navbar').classList.remove('pt-5');
@@ -282,7 +282,7 @@
       document.querySelector('.page-body-wrapper').classList.add('pt-0');
       document.querySelector('.navbar').classList.add('pt-5');
       document.querySelector('.navbar').classList.add('mt-3');
-      
+
     }
     if(document.querySelector('#bannerClose')){
       document.querySelector('#bannerClose').addEventListener('click',function() {
@@ -293,7 +293,7 @@
         document.querySelector('.page-body-wrapper').classList.add('pt-5');
         document.querySelector('.navbar').classList.remove('mt-3');
         var date = new Date();
-        date.setTime(date.getTime() + 24 * 60 * 60 * 1000); 
+        date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
         $.cookie('skydash-pro-banner', "true", { expires: date });
       });
     }
@@ -312,10 +312,10 @@
     //       { "data": "Quote" },
     //       { "data": "Product" },
     //       { "data": "Business" },
-    //       { "data": "Policy" }, 
-    //       { "data": "Premium" }, 
-    //       { "data": "Status" }, 
-    //       { "data": "Updated" }, 
+    //       { "data": "Policy" },
+    //       { "data": "Premium" },
+    //       { "data": "Status" },
+    //       { "data": "Updated" },
     //       {
     //         "className":      'details-control',
     //         "orderable":      false,

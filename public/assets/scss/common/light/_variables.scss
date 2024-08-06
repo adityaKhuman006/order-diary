@@ -23,7 +23,7 @@ $colors: (
   blue:             $blue,
   indigo:           $indigo,
   purple:           $purple,
-  pink:             $pink, 
+  pink:             $pink,
   red:              $red,
   orange:           $orange,
   yellow:           $yellow,
@@ -35,13 +35,13 @@ $colors: (
   gray-light:       #aab2bd,
   gray-lighter:     #e8eff4,
   gray-lightest:    #e6e9ed,
-  gray-dark:        #0f1531, 
+  gray-dark:        #0f1531,
   black:            #000000
 );
 
 
 $theme-colors: (
-  primary:         #4B49AC,
+  primary:         #3ead65,
   secondary:       #a3a4a5,
   success:         #57B657,
   info:            #248AFD,
@@ -65,7 +65,7 @@ $theme-gradient-colors: (
 ////////// COLOR SYSTEM //////////
 
 
-$primary:         #4B49AC;
+$primary:         #3ead65;
 $secondary:       #a3a4a5;
 $success:         #57B657;
 $info:            #248AFD;
@@ -202,7 +202,7 @@ $dropdown-link-hover-bg: #eaeaf1;
 
 $table-accent-bg: transparent;
 $table-hover-bg:  #eaeaf1;
-$table-cell-padding: 1.125rem 1.375rem; 
+$table-cell-padding: 1.125rem 1.375rem;
 $table-border-color: $border-color;
 
 $table-inverse-bg: #2a2b32;
