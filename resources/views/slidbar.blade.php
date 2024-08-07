@@ -24,6 +24,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css">
 
     <!--  -->
+    <!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
@@ -168,6 +173,7 @@
                             <li class="nav-item"><a class="nav-link" href="{{ route('master.customer') }}">Customer</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('master.uom') }}">UOM</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('master.User') }}">User</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('master.belt') }}">Belt</a></li>
                         </ul>
                     </div>
                 </li>

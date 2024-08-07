@@ -3,19 +3,19 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <div class="card p-3">
-    <h3 class="fw-bolder">UOM</h3>
+    <h3 class="fw-bolder">Belt</h3>
     <hr>
     <table class="table table-hover tab-pane">
         <tr>
             <th>#</th>
-            <th>UOM</th>
+            <th>Name</th>
             <th>Action</th>
         </tr>
-        @foreach ($uomData as $key => $item)
+        @foreach ($beltData as $key => $item)
             <tr class="removeble-tr-{{ $item->id }}">
                 <td>{{ $key + 1 }}</td>
-                <td><input type="text" class="border-0 update-uom" data-id='{{ $item->id }}'
-                        value="{{ $item->uom }}">
+                <td><input type="text" class="border-0 update-name" data-id='{{ $item->id }}'
+                        value="{{ $item->name }}">
                 </td>
                 <td>
                     <button type="button" delete-id ='{{ $item->id }}' class="btn btn-danger add-item delete-items"
@@ -26,7 +26,7 @@
     </table>
     <!-- partial -->
     <div class="repeater mt-5">
-        <form action="{{ route('create.uom') }}" method="POST">
+        <form action="{{ route('create.belt') }}" method="POST">
             @csrf
             <div data-repeater-list="category-group">
                 <div id="show_item">
@@ -34,8 +34,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label>UOM</label>
-                                    <input type="text" name="uom"
+                                    <label>Name</label>
+                                    <input type="text" name="name"
                                         class="form-control form-control-sm border-black" placeholder="Name">
                                 </div>
                             </div>
@@ -89,32 +89,32 @@
 <script src="{{ asset('assets/js/notify.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-        $(".update-uom").change(function() {
-            var uom = $(this).val();
+        $(".update-name").change(function() {
+            var name = $(this).val();
             var id = $(this).attr('data-id');
             $.ajax({
-                url: '{{ route('update.uom') }}',
+                url: '{{ route('update.belt') }}',
                 method: 'POST',
                 data: {
                     id: id,
-                    uom: uom,
+                    name: name,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    $.notify("uom updated", "success");
+                    $.notify("Name updated", "success");
                 },
                 error: function(response) {
                     alert(response);
                 }
             })
         })
-    });
+    })
 
     $("#deleteItem").click(function() {
         $("#loader").show();
         var id = $(this).attr('data-id');
         $.ajax({
-            url: '{{ route('delete.uom') }}',
+            url: '{{ route('delete.belt') }}',
             method: 'POST',
             data: {
                 id: id,
