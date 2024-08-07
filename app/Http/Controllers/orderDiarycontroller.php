@@ -6,8 +6,9 @@ use App\Models\add_account_model;
 use App\Models\customer;
 use App\Models\orderTo;
 use App\Models\uom;
-use App\Models\users;
+use App\Models\masterUsers;
 use Illuminate\Http\Request;
+use Illuminate\Tests\Integration\Queue\Order;
 
 
 class orderDiarycontroller extends Controller
@@ -17,60 +18,77 @@ class orderDiarycontroller extends Controller
         return view('index');
     }
 
-    public function master(Request $request)
+    public function masterUser(Request $request)
     {
-        $orderFatch = orderTo::all();
-        $customerFatch = customer::all();
-        $userFatch = users::all();
-        $uomFatch = uom::all();
-        return view('master',compact('orderFatch','customerFatch','userFatch','uomFatch'));
+        return view('master.user');
     }
 
-    public function orderTo(Request $request)
+    public function masterUom(Request $request)
     {
-        $categories = $request->input('category-group', []);
-        foreach ($categories as $category) {
-            orderTo::create([
-                'name' => $category['name'],
-                'number' => $category['number'],
-            ]);
-        }
-        return redirect()->route('master');
+        return view('master.uom');
     }
 
-    public function customer(Request $request)
+    public function masterOrder(Request $request)
     {
-        $customer = $request->input('category-group', []);
-        foreach ($customer as $category) {
+        $data = orderTo::all();
+            return view('master.order',compact('data'));
+    }
+
+    public function masterCustomer(Request $request)
+    {
+        return view('master.customer');
+    }
+
+    public function createCustomer(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
             customer::create([
-                'name' => $category['name'],
-                'address' => $category['address'],
+                "name"=>$item['name'],
+                "address"=>$item['address']
             ]);
         }
-        return redirect()->route('master');
+
+        return redirect()->route('master.customer');
     }
 
-    public function user(Request $request)
-    {
-        $user = $request->input('category-group', []);
-        foreach ($user as $category) {
-            users::create([
-                'name' => $category['name'],
-                'Office_Vender' => $category['Office_Vender'],
+    public function createOrder(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
+            orderTo::create([
+                "name"=>$item['name'],
+                "number"=>$item['number']
             ]);
         }
-        return redirect()->route('master');
+
+        return redirect()->route('master.order');
     }
 
-    public function uom(Request $request)
-    {
-        $uom = $request->input('category-group', []);
-        foreach ($uom as $category) {
+    public function createUom(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
             uom::create([
-                'uom' => $category['uom'],
+                "name"=>$item['name'],
             ]);
         }
-        return redirect()->route('master');
+
+        return redirect()->route('master.uom');
+
+    }
+
+    public function createUser(Request $request){
+        $data =  $request->all();
+
+        foreach ($data['category-group'] as $item){
+            masterUsers::create([
+                "name"=>$item['name'],
+                "type"=>$item['type']
+            ]);
+        }
+
+        return redirect()->route('master.User');
     }
 
 
@@ -79,5 +97,29 @@ class orderDiarycontroller extends Controller
         return view('payment');
     }
 
+    public function report()
+    {
+        return view('report');
+    }
 
+    public function updateOrderName(Request $request)
+    {
+        $data = $request->all();
+        orderTo::where('id',$data['id'])->update(['name'=>$data['name']]);
+        return response()->json(['success'=>'true'],201);
+    }
+
+    public function updateOrderNumber(Request $request)
+    {
+        $data = $request->all();
+        orderTo::where('id',$data['id'])->update(['number'=>$data['number']]);
+        return response()->json(['success'=>'true'],201);
+    }
+
+    public function deleteOrder(Request $request)
+    {
+        $data = $request->all();
+        orderTo::where('id',$data['id'])->delete();
+        return response()->json(['success'=>'true'],201);
+    }
 }

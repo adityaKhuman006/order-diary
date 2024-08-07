@@ -47,10 +47,10 @@
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
 
 <script>
-  new DataTable('#example', {
-    fixedHeader: true,
-    responsive: true
-  });
+    new DataTable('#example', {
+        fixedHeader: true,
+        responsive: true
+    });
 </script>
 
 <script>
@@ -66,16 +66,16 @@
 https://cdn.jsdelivr.net/npm/jquery.repeater@1.2.1/jquery.repeater.min.js
 "></script>
 <script>
-  $('.repeater').repeater({
-    defaultValues: {
-      'text-input': 'foo'
-    },
-    show: function () {
-      $(this).slideDown();
-    },
-    hide: function (deleteElement) {
-      $(this).slideUp(deleteElement);
-    },
-    isFirstItemUndeletable: true
-  });
+    $('.repeater').repeater({
+        defaultValues: {
+            'text-input': 'foo'
+        },
+        show: function () {
+            $(this).slideDown();
+        },
+        hide: function (deleteElement) {
+            $(this).slideUp(deleteElement);
+        },
+        isFirstItemUndeletable: true
+    });
 </script>

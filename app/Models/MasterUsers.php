@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class users extends Model
+class MasterUsers extends Model
 {
     use HasFactory;
 
-    protected $table = "user";
+    protected $table = "master_user";
 
     protected $fillable = [
         "name",
-        "Office_Vender"
+        "type"
     ];
+
+    const OFFICE = 1;
+    const VENDOR = 2;
 }
