@@ -104,6 +104,22 @@ class orderDiarycontroller extends Controller
 
     public function updateOrderName(Request $request)
     {
-//        dd($request->all());
+        $data = $request->all();
+        orderTo::where('id',$data['id'])->update(['name'=>$data['name']]);
+        return response()->json(['success'=>'true'],201);
+    }
+
+    public function updateOrderNumber(Request $request)
+    {
+        $data = $request->all();
+        orderTo::where('id',$data['id'])->update(['number'=>$data['number']]);
+        return response()->json(['success'=>'true'],201);
+    }
+
+    public function deleteOrder(Request $request)
+    {
+        $data = $request->all();
+        orderTo::where('id',$data['id'])->delete();
+        return response()->json(['success'=>'true'],201);
     }
 }

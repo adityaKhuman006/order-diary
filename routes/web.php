@@ -23,7 +23,9 @@ Route::post('/uom',[orderDiarycontroller::class,'uom'])->name('umo.create');
 
 
  Route::any('/payment',[orderDiarycontroller::class,'payment'])->name('payment');
- Route::get('/report',[orderDiarycontroller::class,'report'])->name('report');
+ Route::get('/php artisan serve',[orderDiarycontroller::class,'report'])->name('report');
 
 
  Route::post('update-order-name',[orderDiarycontroller::class,'updateOrderName'])->name('update.order.name');
+ Route::post('update-order-number',[orderDiarycontroller::class,'updateOrderNumber'])->name('update.order.number');
+ Route::post('delete-order',[orderDiarycontroller::class,'deleteOrder'])->name('delete.order');
