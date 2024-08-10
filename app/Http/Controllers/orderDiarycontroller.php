@@ -9,7 +9,9 @@ use App\Models\orderTo;
 use App\Models\uom;
 use App\Models\masterUsers;
 use App\Models\tbOrder;
+use App\Models\VendorExpenses;
 use Illuminate\Http\Request;
+use Illuminate\Queue\RedisQueue;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Tests\Integration\Queue\Order;
 
@@ -18,18 +20,20 @@ class orderDiarycontroller extends Controller
 {
     public function index(Request $request)
     {
-        $order = orderTo::all();
+        $orderMaster = orderTo::all();
         $customer = customer::all();
         $belt = Belt::all();
         $uom = uom::all();
-        return view('index' , compact('order','customer','belt','uom'));
+        $orders = tbOrder::with(['getExpenses','getBelt'])->orderBy('order_priority', 'ASC')->get();
+        return view('index', compact('orderMaster', 'customer', 'belt', 'uom', 'orders'));
     }
 
-    public function tableOrder(Request $request){
+    public function tableOrder(Request $request)
+    {
 
         $attach_doc_file = '';
         $doc_attached_file = '';
-        
+
         if ($request->hasFile('attach_doc_file')) {
             $file = $request->file('attach_doc_file');
             $destinationPath = 'public/img/';
@@ -50,7 +54,7 @@ class orderDiarycontroller extends Controller
             "order_given_by" => $request->order_given_by,
             "order_select" => $request->order_select,
             "order_no" => $request->order_no,
-            "belt_select" => $request->belt_select,
+            "belt_id" => $request->belt_select,
             "quantity" => $request->quantity,
             "description" => $request->description,
             "uom_select" => $request->uom_select,
@@ -72,69 +76,71 @@ class orderDiarycontroller extends Controller
     }
 
 
-
     public function masterbelt(Request $request)
     {
         $beltData = Belt::all();
-        return view('master.belt' , compact('beltData'));
+        return view('master.belt', compact('beltData'));
     }
 
     public function masterUser(Request $request)
     {
         $UserData = masterUsers::all();
-        return view('master.user' , compact('UserData'));
+        return view('master.user', compact('UserData'));
     }
 
     public function masterUom(Request $request)
     {
         $uomData = uom::all();
-        return view('master.uom' , compact('uomData'));
+        return view('master.uom', compact('uomData'));
     }
 
     public function masterOrder(Request $request)
     {
         $data = orderTo::all();
-            return view('master.order',compact('data'));
+        return view('master.order', compact('data'));
     }
 
     public function masterCustomer(Request $request)
     {
         $CustomData = customer::all();
-        return view('master.customer' , compact('CustomData'));
+        return view('master.customer', compact('CustomData'));
     }
 
-    public function createCustomer(Request $request){
-        $data =  $request->all();
+    public function createCustomer(Request $request)
+    {
+        $data = $request->all();
 
-        foreach ($data['category-group'] as $item){
+        foreach ($data['category-group'] as $item) {
             customer::create([
-                "name"=>$item['name'],
-                "address"=>$item['address']
+                "name" => $item['name'],
+                "address" => $item['address']
             ]);
         }
 
         return redirect()->route('master.customer');
     }
 
-    public function createOrder(Request $request){
-        $data =  $request->all();
+    public function createOrder(Request $request)
+    {
+        $data = $request->all();
 
-        foreach ($data['category-group'] as $item){
+        foreach ($data['category-group'] as $item) {
             orderTo::create([
-                "name"=>$item['name'],
-                "number"=>$item['number']
+                "name" => $item['name'],
+                "number" => $item['number']
             ]);
         }
 
         return redirect()->route('master.order');
     }
 
-    public function createUom(Request $request){
-        $data =  $request->all();
+    public function createUom(Request $request)
+    {
+        $data = $request->all();
 
-        foreach ($data['category-group'] as $item){
+        foreach ($data['category-group'] as $item) {
             uom::create([
-                "uom"=>$item['uom'],
+                "uom" => $item['uom'],
             ]);
         }
 
@@ -142,25 +148,27 @@ class orderDiarycontroller extends Controller
 
     }
 
-    public function createUser(Request $request){
-        $data =  $request->all();
+    public function createUser(Request $request)
+    {
+        $data = $request->all();
 
-        foreach ($data['category-group'] as $item){
+        foreach ($data['category-group'] as $item) {
             masterUsers::create([
-                "name"=>$item['name'],
-                "type"=>$item['type']
+                "name" => $item['name'],
+                "type" => $item['type']
             ]);
         }
 
         return redirect()->route('master.User');
     }
 
-    public function createBelt(Request $request){
-        $data =  $request->all();
+    public function createBelt(Request $request)
+    {
+        $data = $request->all();
 
-        foreach ($data['category-group'] as $item){
+        foreach ($data['category-group'] as $item) {
             Belt::create([
-                "name"=>$item['name'],
+                "name" => $item['name'],
             ]);
         }
 
@@ -181,100 +189,183 @@ class orderDiarycontroller extends Controller
     public function updateOrderName(Request $request)
     {
         $data = $request->all();
-        orderTo::where('id',$data['id'])->update(['name'=>$data['name'] ?? '']);
-        return response()->json(['success'=>'true'],201);
+        orderTo::where('id', $data['id'])->update(['name' => $data['name'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function updateOrderNumber(Request $request)
     {
         $data = $request->all();
-        orderTo::where('id',$data['id'])->update(['number'=>$data['number']  ?? '']);
-        return response()->json(['success'=>'true'],201);
+        orderTo::where('id', $data['id'])->update(['number' => $data['number'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function deleteOrder(Request $request)
     {
         $data = $request->all();
-        orderTo::where('id',$data['id'])->delete();
-        return response()->json(['success'=>'true'],201);
+        orderTo::where('id', $data['id'])->delete();
+        return response()->json(['success' => 'true'], 201);
     }
-
-
 
 
     public function updateCustomerName(Request $request)
     {
         $data = $request->all();
-        customer::where('id',$data['id'])->update(['name'=>$data['name']  ?? '' ]);
-        return response()->json(['success'=>'true'],201);
+        customer::where('id', $data['id'])->update(['name' => $data['name'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function updateCustomeraddress(Request $request)
     {
         $data = $request->all();
-        customer::where('id',$data['id'])->update(['address'=>$data['address'] ?? '']);
-        return response()->json(['success'=>'true'],201);
+        customer::where('id', $data['id'])->update(['address' => $data['address'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function deleteCustomer(Request $request)
     {
         $data = $request->all();
-        customer::where('id',$data['id'])->delete();
-        return response()->json(['success'=>'true'],201);
+        customer::where('id', $data['id'])->delete();
+        return response()->json(['success' => 'true'], 201);
     }
-
 
 
     public function updateuom(Request $request)
     {
         $data = $request->all();
-        uom::where('id',$data['id'])->update(['uom'=>$data['uom'] ?? '']);
-        return response()->json(['success'=>'true'],201);
+        uom::where('id', $data['id'])->update(['uom' => $data['uom'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function deleteuom(Request $request)
     {
         $data = $request->all();
-        uom::where('id',$data['id'])->delete();
-        return response()->json(['success'=>'true'],201);
+        uom::where('id', $data['id'])->delete();
+        return response()->json(['success' => 'true'], 201);
     }
-
 
 
     public function updateuserName(Request $request)
     {
         $data = $request->all();
-        masterUsers::where('id',$data['id'])->update(['name'=>$data['name'] ?? '']);
-        return response()->json(['success'=>'true'],201);
+        masterUsers::where('id', $data['id'])->update(['name' => $data['name'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function updateusertype(Request $request)
     {
         $data = $request->all();
-        masterUsers::where('id',$data['id'])->update(['type'=>$data['type'] ?? '']);
-        return response()->json(['success'=>'true'],201);
+        masterUsers::where('id', $data['id'])->update(['type' => $data['type'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function deleteuser(Request $request)
     {
         $data = $request->all();
-        masterUsers::where('id',$data['id'])->delete();
-        return response()->json(['success'=>'true'],201);
+        masterUsers::where('id', $data['id'])->delete();
+        return response()->json(['success' => 'true'], 201);
     }
-
 
 
     public function updateBelt(Request $request)
     {
         $data = $request->all();
-        Belt::where('id',$data['id'])->update(['name'=>$data['name'] ?? '']);
-        return response()->json(['success'=>'true'],201);
+        Belt::where('id', $data['id'])->update(['name' => $data['name'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
     }
 
     public function deleteBelt(Request $request)
     {
         $data = $request->all();
-        Belt::where('id',$data['id'])->delete();
-        return response()->json(['success'=>'true'],201);
+        Belt::where('id', $data['id'])->delete();
+        return response()->json(['success' => 'true'], 201);
+    }
+
+    public function createSpecificOrder(Request $request)
+    {
+        $order = orderTo::all();
+        $customer = customer::all();
+        $belt = Belt::all();
+        $uom = uom::all();
+        return view('create-order', compact('order', 'customer', 'belt', 'uom'));
+    }
+
+    public function updateOrder(Request $request)
+    {
+
+        $attach_doc_file = '';
+        $doc_attached_file = '';
+
+        $data = $request->all();
+
+        if ($request->hasFile('attach_doc_file')) {
+            $file = $request->file('attach_doc_file');
+            $destinationPath = 'public/img/';
+            $attach_doc_file = $file->getClientOriginalName();
+            $file->move($destinationPath, $attach_doc_file);
+        }
+
+        if ($request->hasFile('doc_attached_file')) {
+            $file = $request->file('doc_attached_file');
+            $destinationPath = 'public/img/';
+            $doc_attached_file = $file->getClientOriginalName();
+            $file->move($destinationPath, $doc_attached_file);
+        }
+
+        tbOrder::where('id',$request->id)->update([
+            "customer_name" => $request->customer_name,
+            "date" => $request->date,
+            "order_given_by" => $request->order_given_by,
+            "order_select" => $request->order_select,
+            "order_no" => $request->order_no,
+            "belt_id" => $request->belt_select,
+            "quantity" => $request->quantity,
+            "description" => $request->description,
+            "uom_select" => $request->uom_select,
+            "rate" => $request->rate,
+            "amount" => $request->amount,
+            "attach_doc_file" => $attach_doc_file,
+            "remark_vender" => $request->remark_vender,
+            "order_priority" => $request->order_priority,
+            "wight_belt" => $request->wight_belt,
+            "packing_size_belt" => $request->packing_size_belt,
+            "packing_charges" => $request->packing_charges,
+            "transportaion_charges" => $request->transportaion_charges,
+            "doc_attached_file" => $doc_attached_file,
+            "tentaive_delevery_date" => $request->tentaive_delevery_date,
+            "delevery_date" => $request->delevery_date,
+        ]);
+
+        if($data['category-group'] && $data['category-group'] != null){
+              foreach ($data['category-group'] as $item) {
+                    VendorExpenses::create([
+                        'order_id' => $request->id,
+                        'particular' => $item['particular'],
+                        'amount' => $request['amount'],
+                    ]);
+              }
+        }
+
+        return response()->json(['success' => 'true'], 201);
+    }
+
+    public function updateExpensesParticular(Request $request)
+    {
+        $data = $request->all();
+        VendorExpenses::where('id', $data['id'])->update(['particular' => $data['particular'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
+    }
+    public function updateExpensesAmount(Request $request)
+    {
+        $data = $request->all();
+        VendorExpenses::where('id', $data['id'])->update(['amount' => $data['amount'] ?? '']);
+        return response()->json(['success' => 'true'], 201);
+    }
+
+    public function deleteExpenses(Request $request)
+    {
+        $data = $request->all();
+        VendorExpenses::where('id', $data['id'])->delete();
+        return response()->json(['success' => 'true'], 201);
     }
 }

@@ -49,5 +49,13 @@ Route::post('/uom',[orderDiarycontroller::class,'uom'])->name('umo.create');
  Route::post('update-belt',[orderDiarycontroller::class,'updateBelt'])->name('update.belt');
  Route::post('delete-belt',[orderDiarycontroller::class,'deleteBelt'])->name('delete.belt');
 
-
  Route::post('table-create',[orderDiarycontroller::class,'tableOrder'])->name('table.order');
+
+ Route::get('create-specific-order',[orderDiarycontroller::class,'createSpecificOrder'])->name('create.specific.order');
+
+ Route::post('update.order',[orderDiarycontroller::class,'updateOrder'])->name('update.order');
+
+ Route::post('update-expenses-particular',[orderDiarycontroller::class,'updateExpensesParticular'])->name('update.expenses.particular');
+ Route::post('update-expenses-amount',[orderDiarycontroller::class,'updateExpensesAmount'])->name('update.expenses.amount');
+
+ Route::post('delete-expenses',[orderDiarycontroller::class,'deleteExpenses'])->name('delete.expenses');

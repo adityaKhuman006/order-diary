@@ -58,7 +58,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #0000003d;
+        background: #FFFFFF;
         z-index: 9999;
     }
 

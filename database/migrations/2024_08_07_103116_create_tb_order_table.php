@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('order_given_by')->nullable();
             $table->string('order_select')->nullable();
             $table->string('order_no')->nullable();
-            $table->string('belt_select')->nullable();
+            $table->unsignedBigInteger('belt_id');
+            $table->foreign('belt_id')->references('id')->on('belt');
             $table->string('quantity')->nullable();
             $table->string('description')->nullable();
             $table->string('uom_select')->nullable();

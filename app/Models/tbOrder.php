@@ -17,7 +17,7 @@ class tbOrder extends Model
         'order_given_by',
         'order_select',
         'order_no',
-        'belt_select',
+        'belt_id',
         'quantity',
         'description',
         'uom_select',
@@ -34,4 +34,14 @@ class tbOrder extends Model
         'tentaive_delevery_date',
         'delevery_date',
     ];
+
+    function getExpenses()
+    {
+       return $this->hasMany(VendorExpenses::class, 'order_id', 'id');
+    }
+
+    function getBelt()
+    {
+        return $this->hasMany(Belt::class, 'id', 'belt_id');
+    }
 }
