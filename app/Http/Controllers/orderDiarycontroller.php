@@ -10,8 +10,12 @@ use App\Models\uom;
 use App\Models\masterUsers;
 use App\Models\tbOrder;
 use App\Models\VendorExpenses;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Queue\RedisQueue;
+use Illuminate\Support\Facades\Hash;
+
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Tests\Integration\Queue\Order;
 
@@ -74,6 +78,7 @@ class orderDiarycontroller extends Controller
 
         return redirect()->route('index');
     }
+
 
 
     public function masterbelt(Request $request)
@@ -208,6 +213,8 @@ class orderDiarycontroller extends Controller
     }
 
 
+
+
     public function updateCustomerName(Request $request)
     {
         $data = $request->all();
@@ -230,6 +237,7 @@ class orderDiarycontroller extends Controller
     }
 
 
+
     public function updateuom(Request $request)
     {
         $data = $request->all();
@@ -243,6 +251,7 @@ class orderDiarycontroller extends Controller
         uom::where('id', $data['id'])->delete();
         return response()->json(['success' => 'true'], 201);
     }
+
 
 
     public function updateuserName(Request $request)
@@ -367,5 +376,74 @@ class orderDiarycontroller extends Controller
         $data = $request->all();
         VendorExpenses::where('id', $data['id'])->delete();
         return response()->json(['success' => 'true'], 201);
+    }
+
+    public function users(Request  $request)
+    {
+        $Item = User::all();
+        return view('users', compact('Item'));
+    }
+
+    public function usersCreate(Request  $request)
+    {
+        return view('users-create');
+    }
+
+    public function usersAdd(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:6',
+            'password_confirmation' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'type' => $request->type,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users');
+    }
+
+    public function usersUpdate(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        return view('users-update', compact('user'));
+    }
+
+    public function usersUpdateData(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:6',
+            'password_confirmation' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = User::findOrFail($request->id);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'type' => $request->type,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users');
     }
 }
